@@ -1,0 +1,47 @@
+
+/* Estilo para el tema oscuro */
+
+.root {
+    -fx-background-image: url(../Imagen/fondo-modo-oscuro.jpg); /* Fondo gris muy oscuro */
+}
+
+#titulo{
+    -fx-font-size: 35px;
+    -fx-font-family: 'serif';
+    -fx-text-fill: #E0E0E0; /* Texto gris claro para que resalte en el nuevo fondo oscuro */
+    -fx-effect: dropshadow(gaussian, #ff5722, 15, 0.8, 0, 0); 
+}
+
+Button{
+    -fx-background-color: linear-gradient(to bottom, #424242, #313131); /* Gradiente gris oscuro */
+    -fx-text-fill: #E0E0E0; /* Texto gris claro */
+    -fx-border-color: #616161;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-font-family: 'serif';
+    -fx-padding: 12 25 12 25;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.1), 10, 0.5, 1, 1);
+    -fx-background-radius: 24px;
+}
+
+Button:hover{
+    -fx-background-color: linear-gradient(to bottom, #515151, #424242);
+    -fx-border-color: #ff5722;
+    -fx-effect: dropshadow(gaussian, rgba(255, 87, 34, 0.5), 15, 0.7, 2, 2);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-cursor: hand;
+}
+
+.exit-icon {
+    -fx-cursor: hand; /* Cambia el cursor a una mano al pasar por encima */
+
+    -fx-transition: -fx-opacity 0.3s;
+}
+
+.exit-icon:hover {
+    -fx-opacity: 1.0; /* Se vuelve completamente opaco al pasar el ratón */
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.7), 10, 0.5, 0, 0); /* Añade un brillo */
+}
