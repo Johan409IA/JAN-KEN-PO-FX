@@ -94,7 +94,7 @@ public class JuegoController implements Initializable {
             statusLabel.setText("Turno del Bot (" + BOT_SYMBOL + ")...");
             // Pausa para que el bot no juegue instantáneamente
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
-            pause.setOnFinished(event -> botMove());
+            pause.setOnFinished(event -> botMove()); // funcion lambda
             pause.play();
         }
     }
