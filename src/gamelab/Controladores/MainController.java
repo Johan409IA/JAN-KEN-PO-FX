@@ -17,16 +17,18 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.Node;
 
 /**
- * Controlador para la vista del menú principal (MainMenu.fxml).
- * Gestiona las acciones del usuario como iniciar partida, ir a configuración o salir.
+ * Controlador para la vista del menú principal (MainMenu.fxml). Gestiona las
+ * acciones del usuario como iniciar partida, ir a configuración o salir.
  */
- public class MainController {
-     
-     @FXML private Button btnOpc;
-     
-     @FXML
+public class MainController {
+
+    @FXML
+    private Button btnOpc;
+
+    @FXML
     private ImageView exitImageView;
 
     // Este método se vincula con el onAction="#handleSalir" del botón en el FXML.
@@ -34,7 +36,7 @@ import javafx.scene.input.MouseEvent;
     private void handleSalir(MouseEvent event) {
         // Buena práctica: Pedir confirmación antes de cerrar la aplicación.
         // Esto previene cierres accidentales.
-        
+
         // Creamos una alerta de tipo CONFIRMATION
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmar Salida");
@@ -56,68 +58,69 @@ import javafx.scene.input.MouseEvent;
             System.out.println("Salida cancelada.");
         }
     }
-    
+
     /**
-     * Este método permite a otras clases (como GameLab.java)
-     * establecer la imagen del ícono de salida según el tema.
+     * Este método permite a otras clases (como GameLab.java) establecer la
+     * imagen del ícono de salida según el tema.
+     *
      * @param theme El tema actual ("Claro" o "Oscuro").
      */
     public void setExitIconForTheme(String theme) {
         String imagePath;
         if (Preferencias.TEMA_OSCURO.equals(theme)) {
             // Usamos la imagen que se ve bien en el fondo oscuro
-            imagePath = "/Imagen/salir-oscuro.png"; 
+            imagePath = "/Imagen/salir-oscuro.png";
         } else {
             // Usamos la imagen que se ve bien en el fondo claro
             imagePath = "/Imagen/salir.png";
         }
 
         try {
-        // La forma de cargar la imagen es correcta, solo la ruta estaba mal.
-        Image icon = new Image(getClass().getResource(imagePath).toExternalForm());
-        exitImageView.setImage(icon);
-        System.out.println("Ícono de salida cargado desde: " + imagePath); // Mensaje de depuración útil
-    } catch (Exception e) {
-        System.err.println("Error FATAL: No se pudo encontrar el ícono de salida en la ruta: " + imagePath);
-        // Imprime la traza para ver más detalles del error si persiste
-        e.printStackTrace();
+            // La forma de cargar la imagen es correcta, solo la ruta estaba mal.
+            Image icon = new Image(getClass().getResource(imagePath).toExternalForm());
+            exitImageView.setImage(icon);
+            System.out.println("Ícono de salida cargado desde: " + imagePath); // Mensaje de depuración útil
+        } catch (Exception e) {
+            System.err.println("Error FATAL: No se pudo encontrar el ícono de salida en la ruta: " + imagePath);
+            // Imprime la traza para ver más detalles del error si persiste
+            e.printStackTrace();
+        }
     }
-    }
-    
+
     @FXML
     private void handleOpciones(ActionEvent event) {
         try {
             // 1. Cargar el archivo FXML de la ventana de configuración
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gamelab/Configuracion.fxml"));
             Parent root = loader.load();
-            
+
             // 1. Obtener el controlador de la ventana de configuración
             ConfiguracionController configController = loader.getController();
-            
+
             // 1. Pasar la referencia de ESTE controlador (se mantiene)
             configController.setMainController(this);
-            
+
             // 2. Obtener la escena actual y pasarla al controlador de configuración
             Scene currentScene = btnOpc.getScene();
             configController.setMainScene(currentScene);
-            
+
             // 2. Crear un nuevo Stage (una nueva ventana)
             Stage configuracionStage = new Stage();
             configuracionStage.setTitle("Configuración");
             configuracionStage.setScene(new Scene(root));
-            
+
             // 3. Configurar la modalidad (opcional pero recomendado)
             // Modality.APPLICATION_MODAL bloquea la interacción con la ventana principal
             // hasta que esta ventana de configuración se cierre.
             configuracionStage.initModality(Modality.APPLICATION_MODAL);
-            
+
             // Opcional: establecer el "dueño" de la ventana
             Stage mainStage = (Stage) btnOpc.getScene().getWindow();
             configuracionStage.initOwner(mainStage);
-            
+
             // 4. Mostrar la ventana y esperar a que el usuario la cierre
             configuracionStage.showAndWait();
-            
+
             // Una vez que la ventana se cierra, podrías querer recargar algo en el menú principal.
             System.out.println("Ventana de configuración cerrada.");
 
@@ -128,6 +131,39 @@ import javafx.scene.input.MouseEvent;
             alert.setTitle("Error");
             alert.setHeaderText("No se pudo abrir la ventana de configuración.");
             alert.setContentText("Ocurrió un error al cargar la vista: " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    // En gamelab.Controladores.MainController.java
+    @FXML
+    private void handleJugar(ActionEvent event) {
+        try {
+            // Cargar el FXML de la pantalla de juego
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gamelab/Juego.fxml"));
+            Parent root = loader.load();
+
+            // Crear una nueva ventana (Stage) para el juego
+            Stage gameStage = new Stage();
+            gameStage.setTitle("Tic-Tac-Toe");
+            gameStage.setScene(new Scene(root));
+
+            // Opcional: Ocultar el menú principal mientras se juega
+            Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            mainStage.hide();
+
+            // Cuando la ventana del juego se cierre, volver a mostrar el menú principal
+            gameStage.setOnHidden(e -> mainStage.show());
+
+            gameStage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Mostrar un error si no se puede cargar la pantalla
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("No se pudo iniciar el juego.");
+            alert.setContentText("Ocurrió un error al cargar la pantalla de juego.");
             alert.showAndWait();
         }
     }

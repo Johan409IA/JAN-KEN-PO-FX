@@ -1,0 +1,49 @@
+.root {
+    -fx-background-color: #ECEFF1; /* Un fondo gris claro y neutro */
+}
+
+.score-box, .timer-box {
+    -fx-padding: 10;
+    -fx-border-color: #B0BEC5;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+}
+
+.game-button {
+    -fx-font-size: 48px;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+
+.game-button:hover {
+    -fx-background-color: #CFD8DC;
+}
+
+.game-button-x {
+    -fx-text-fill: #E53935; /* Rojo */
+}
+
+.game-button-o {
+    -fx-text-fill: #1E88E5; /* Azul */
+}
+
+.round-icon {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.round-win {
+    -fx-text-fill: #43A047; /* Verde */
+}
+
+.round-loss {
+    -fx-text-fill: #E53935; /* Rojo */
+}
+
+.round-draw {
+    -fx-text-fill: #757575; /* Gris */
+}

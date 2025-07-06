@@ -10,7 +10,7 @@
    <children>
       <Text fx:id="titulo" fill="WHITE" layoutX="276.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BIENBENIDO A GAMELAB" textAlignment="CENTER">
       </Text>
-      <Button fx:id="btnRaya" layoutX="371.0" layoutY="196.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="211.0" text="JUGAR">
+      <Button fx:id="btnRaya" layoutX="371.0" layoutY="196.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="211.0" text="JUGAR" onAction="#handleJugar"  >
       </Button>
       <Button fx:id="btnOpc" layoutX="371.0" layoutY="270.0" mnemonicParsing="false" onAction="#handleOpciones" prefHeight="44.0" prefWidth="211.0" text="OPCIONES" />
       <ImageView fitHeight="212.0" fitWidth="244.0" layoutX="52.0" layoutY="188.0" pickOnBounds="true" preserveRatio="true" styleClass="imagen-raya">
