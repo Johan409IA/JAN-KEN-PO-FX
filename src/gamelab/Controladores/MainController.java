@@ -25,9 +25,15 @@ import javafx.scene.Node;
  */
 public class MainController {
 
+    // --- Vinculación de Componentes FXML ---
+    @FXML
+    private Button btnRaya;
     @FXML
     private Button btnOpc;
-
+    @FXML
+    private Button btnRnd; // El botón "REANUDAR"
+    @FXML
+    private Button btnMjd;
     @FXML
     private ImageView exitImageView;
 
@@ -139,32 +145,48 @@ public class MainController {
     @FXML
     private void handleJugar(ActionEvent event) {
         try {
-            // Cargar el FXML de la pantalla de juego
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gamelab/Juego.fxml"));
             Parent root = loader.load();
 
-            // Crear una nueva ventana (Stage) para el juego
+            JuegoController juegoController = loader.getController();
+            // ¡Ahora le decimos que inicie una partida contra un bot y que el humano usa X!
+            juegoController.initPartida(true, "X");
+
             Stage gameStage = new Stage();
-            gameStage.setTitle("Tic-Tac-Toe");
+            gameStage.setTitle("Tic-Tac-Toe vs Bot");
             gameStage.setScene(new Scene(root));
 
-            // Opcional: Ocultar el menú principal mientras se juega
-            Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            mainStage.hide();
-
-            // Cuando la ventana del juego se cierre, volver a mostrar el menú principal
-            gameStage.setOnHidden(e -> mainStage.show());
-
+            ((Stage) btnRaya.getScene().getWindow()).close();
             gameStage.show();
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            // Mostrar un error si no se puede cargar la pantalla
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("No se pudo iniciar el juego.");
-            alert.setContentText("Ocurrió un error al cargar la pantalla de juego.");
-            alert.showAndWait();
         }
     }
+
+    @FXML
+    private void handleReanudar(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gamelab/ReanudarPartida.fxml"));
+            Parent root = loader.load();
+
+            // --- INICIO DE LA MODIFICACIÓN ---
+            // 1. Obtener el controlador de la ventana de reanudar
+            ReanudarPartidaController reanudarController = loader.getController();
+
+            // 2. Obtener la ventana actual (el menú principal) y pasarla al controlador
+            Stage currentStage = (Stage) btnRnd.getScene().getWindow();
+            reanudarController.setMainStage(currentStage);
+
+            // --- FIN DE LA MODIFICACIÓN ---
+            Stage stage = new Stage();
+            stage.setTitle("Reanudar Partida");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(currentStage); // Dejamos esto, es buena práctica aunque no lo usemos para cerrar
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
