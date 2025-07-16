@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.GameController">
+   <children>
+      <ImageView fitHeight="600.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="/imagenes/tablero_yankepo.png" />
+         </image>
+      </ImageView>
+      <HBox alignment="CENTER_LEFT" layoutX="25.0" layoutY="20.0" prefHeight="50.0" prefWidth="750.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="20.0">
+         <children>
+            <ImageView fx:id="pauseButton" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#handlePause" pickOnBounds="true" preserveRatio="true" styleClass="pause-icon-button">
+               <image>
+                  <Image url="/imagenes/stop.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+      <Label fx:id="timerLabel" alignment="CENTER" layoutX="350.0" layoutY="27.0" prefHeight="40.0" prefWidth="100.0" styleClass="timer-label-neon" text="0:00" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="27.0" />
+      <AnchorPane layoutX="145.0" layoutY="80.0" prefHeight="400.0" prefWidth="510.0" AnchorPane.leftAnchor="145.0" AnchorPane.rightAnchor="145.0" AnchorPane.topAnchor="80.0">
+         <children>
+            <VBox fx:id="playerChoiceBox" alignment="CENTER" layoutX="-100.0" prefHeight="400.0" prefWidth="100.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-100.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fx:id="playerPaper" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#handlePlayerChoice" pickOnBounds="true" preserveRatio="true" styleClass="choice-image" userData="PAPEL">
+                     <image>
+                        <Image url="/imagenes/PAPEL.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="playerPiedra" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#handlePlayerChoice" pickOnBounds="true" preserveRatio="true" styleClass="choice-image" userData="PIEDRA">
+                     <image>
+                        <Image url="/imagenes/PIEDRA.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="playerTijera" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#handlePlayerChoice" pickOnBounds="true" preserveRatio="true" styleClass="choice-image" userData="TIJERA">
+                     <image>
+                        <Image url="/imagenes/TIJERA.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </VBox>
+            <VBox fx:id="botChoiceBox" alignment="CENTER" layoutX="510.0" prefHeight="400.0" prefWidth="100.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-100.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fx:id="botPaper" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="bot-choice-image">
+                     <image>
+                        <Image url="/imagenes/PAPEL.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="botPiedra" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="bot-choice-image">
+                     <image>
+                        <Image url="/imagenes/PIEDRA.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="botTijera" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="bot-choice-image">
+                     <image>
+                        <Image url="/imagenes/TIJERA.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="100.0" prefWidth="250.0" spacing="5.0" AnchorPane.bottomAnchor="-50.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="130.0">
+               <children>
+                  <Label fx:id="roundResultText" alignment="CENTER" text="¡Elige tu jugada!" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="choicesMadeText" alignment="CENTER" textFill="#e6e6e6">
+                     <font>
+                        <Font name="System Italic" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <!-- **REESTRUCTURADO** Marcadores de Puntuación con 5 casillas -->
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="800.0" spacing="100.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label fx:id="playerScoreLabel" styleClass="score-label" text="Jugador: 0" />
+                  <StackPane>
+                     <children>
+                        <ImageView fitHeight="40.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="/imagenes/casillero-5.png" />
+                           </image>
+                        </ImageView>
+                        <HBox fx:id="playerResultBox" alignment="CENTER" spacing="10.0" StackPane.alignment="CENTER">
+                           <children>
+                              <ImageView fx:id="playerResult1" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="playerResult2" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="playerResult3" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="playerResult4" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="playerResult5" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </StackPane>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" spacing="10.0">
+               <children>
+                  <StackPane>
+                     <children>
+                        <ImageView fitHeight="40.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="/imagenes/casillero-5.png" />
+                           </image>
+                        </ImageView>
+                        <HBox fx:id="botResultBox" alignment="CENTER" spacing="10.0" StackPane.alignment="CENTER">
+                           <children>
+                              <ImageView fx:id="botResult1" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="botResult2" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="botResult3" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="botResult4" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="botResult5" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </StackPane>
+                  <Label fx:id="botScoreLabel" styleClass="score-label" text="Bot: 0" />
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

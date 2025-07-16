@@ -1,0 +1,63 @@
+/* --- TEMA NEÓN PÚRPURA/CIAN (MODO OSCURO) --- */
+
+/* Sobre-escribe el fondo del panel raíz */
+.root-pane {
+    /* Gradiente radial de púrpura oscuro a negro */
+    -fx-background-color: radial-gradient(center 50% 50%, radius 50%, #2e0a2e, #000000);
+}
+
+/* Sobre-escribe el estilo del título principal */
+.title-label {
+    /* Efecto de brillo neón púrpura/magenta */
+    -fx-effect: dropshadow(gaussian, #ff00ff, 25, 0.9, 0, 0);
+}
+
+/* Sobre-escribe el estilo de los botones del menú */
+.menu-button {
+    -fx-text-fill: #e0c0ff; /* Texto lavanda pálido */
+    /* Borde neón cian/turquesa */
+    -fx-border-color: #00ffff;
+}
+
+/* Sobre-escribe el efecto hover de los botones */
+.menu-button:hover {
+    -fx-background-color: #00ffff; /* El fondo se llena de color cian */
+    -fx-effect: dropshadow(gaussian, #00ffff, 15, 0.7, 0, 0); /* Brillo exterior cian */
+}
+
+/* Sobre-escribe el icono de salida */
+.exit-button .exit-icon {
+    -fx-fill: #00ffff; /* Icono de color cian */
+}
+
+/* --- Estilos de Configuración para el Tema Oscuro --- */
+
+.settings-subtitle {
+    -fx-text-fill: #ff00ff; /* Subtítulos en magenta */
+}
+
+.settings-label {
+    -fx-text-fill: #e0c0ff;
+}
+
+.toggle-button:selected {
+    -fx-background-color: #00ffff;
+    -fx-border-color: white;
+}
+
+.list-view {
+    -fx-border-color: #ff00ff; /* Borde de la lista en magenta */
+}
+
+.list-view .list-cell {
+    -fx-text-fill: #e0c0ff;
+}
+
+.list-view .list-cell:filled:hover {
+    -fx-background-color: rgba(0, 255, 255, 0.3); /* Cian semitransparente al pasar el ratón */
+}
+
+.list-view .list-cell:filled:selected {
+    -fx-background-color: #00ffff; /* Fondo cian sólido al seleccionar */
+    -fx-text-fill: black;
+}

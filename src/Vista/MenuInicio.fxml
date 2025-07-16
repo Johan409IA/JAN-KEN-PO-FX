@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<!--
+    ================================================================================
+    == CAMBIO CLAVE: Asegúrate de que esta línea contenga el atributo fx:controller ==
+    ================================================================================
+    La ruta es el nombre del paquete seguido por el nombre de la clase: "Controladores.MenuController"
+-->
+<AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="root-pane" stylesheets="@/estilos/menu-estilos.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.MenuController">
+   <children>
+      <VBox alignment="CENTER" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label styleClass="title-label" text="BIENVENIDO A JAN KEN PO" />
+            <VBox alignment="CENTER" prefWidth="100.0" spacing="15.0">
+               <children>
+                  <!-- Asegúrate de que onAction apunte al método correcto -->
+                  <Button mnemonicParsing="false" onAction="#handleIniciarPartida" styleClass="menu-button" text="Iniciar Partida" />
+                  <Button mnemonicParsing="false" onAction="#handleReanudarPartida" styleClass="menu-button" text="Reanudar Partida" />
+                  <Button mnemonicParsing="false" onAction="#handleMultijugador" styleClass="menu-button" text="Multijugador" />
+                  <Button mnemonicParsing="false" onAction="#handleConfiguracion" styleClass="menu-button" text="Configuración" />
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+      <StackPane fx:id="exitButton" onMouseClicked="#handleExit" styleClass="exit-button" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
+         <children>
+            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" styleClass="exit-icon">
+               <image>
+                  <Image url="/imagenes/cerrar.png" />
+               </image>
+            </ImageView>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>

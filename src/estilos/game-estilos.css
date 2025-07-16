@@ -1,0 +1,45 @@
+/* Estilo para las elecciones del jugador */
+.choice-image {
+    -fx-effect: dropshadow(gaussian, #00FF00, 15, 0.7, 0, 0);
+    -fx-cursor: hand;
+}
+.choice-image:hover {
+    -fx-effect: dropshadow(gaussian, #00FF00, 25, 0.9, 0, 0);
+}
+
+/* **NUEVO** Estilo para las elecciones del bot (siempre visibles) */
+.bot-choice-image {
+    -fx-opacity: 0.6; /* Un poco atenuadas por defecto */
+    -fx-effect: dropshadow(gaussian, #E0E0E0, 10, 0.5, 0, 0);
+}
+
+/* **NUEVO** Estilo para la elección seleccionada del bot */
+.bot-choice-selected {
+    -fx-opacity: 1.0;
+    -fx-effect: dropshadow(gaussian, #FFD700, 25, 0.9, 0, 0);
+}
+
+/* Estilo para el botón de pausa */
+.pause-icon-button {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.2, 0, 0);
+    -fx-cursor: hand;
+}
+.pause-icon-button:hover {
+    -fx-effect: dropshadow(gaussian, #FFFFFF, 15, 0.8, 0, 0);
+}
+
+/* **NUEVO** Estilo para el label del temporizador (solo texto neón) */
+.timer-label-neon {
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Black", sans-serif;
+    -fx-font-size: 28px;
+    -fx-effect: dropshadow(gaussian, #00FF00, 15, 0.8, 0, 0);
+}
+
+/* **NUEVO** Estilo para las etiquetas de puntuación (Jugador: 0) */
+.score-label {
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Black", sans-serif;
+    -fx-font-size: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 5, 0.3, 0, 0);
+}
