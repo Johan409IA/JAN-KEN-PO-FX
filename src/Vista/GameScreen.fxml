@@ -14,14 +14,14 @@
    <children>
       <ImageView fitHeight="600.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
-            <Image url="/imagenes/tablero_yankepo.png" />
+            <Image url="@../imagenes/tablero_yankepo.png" />
          </image>
       </ImageView>
       <HBox alignment="CENTER_LEFT" layoutX="25.0" layoutY="20.0" prefHeight="50.0" prefWidth="750.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="20.0">
          <children>
             <ImageView fx:id="pauseButton" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#handlePause" pickOnBounds="true" preserveRatio="true" styleClass="pause-icon-button">
                <image>
-                  <Image url="/imagenes/stop.png" />
+                  <Image url="@../imagenes/stop.png" />
                </image>
             </ImageView>
          </children>
@@ -33,17 +33,17 @@
                <children>
                   <ImageView fx:id="playerPaper" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#handlePlayerChoice" pickOnBounds="true" preserveRatio="true" styleClass="choice-image" userData="PAPEL">
                      <image>
-                        <Image url="/imagenes/PAPEL.png" />
+                        <Image url="@../imagenes/PAPEL.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="playerPiedra" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#handlePlayerChoice" pickOnBounds="true" preserveRatio="true" styleClass="choice-image" userData="PIEDRA">
                      <image>
-                        <Image url="/imagenes/PIEDRA.png" />
+                        <Image url="@../imagenes/PIEDRA.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="playerTijera" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#handlePlayerChoice" pickOnBounds="true" preserveRatio="true" styleClass="choice-image" userData="TIJERA">
                      <image>
-                        <Image url="/imagenes/TIJERA.png" />
+                        <Image url="@../imagenes/TIJERA.png" />
                      </image>
                   </ImageView>
                </children>
@@ -52,17 +52,17 @@
                <children>
                   <ImageView fx:id="botPaper" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="bot-choice-image">
                      <image>
-                        <Image url="/imagenes/PAPEL.png" />
+                        <Image url="@../imagenes/PAPEL.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="botPiedra" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="bot-choice-image">
                      <image>
-                        <Image url="/imagenes/PIEDRA.png" />
+                        <Image url="@../imagenes/PIEDRA.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="botTijera" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="bot-choice-image">
                      <image>
-                        <Image url="/imagenes/TIJERA.png" />
+                        <Image url="@../imagenes/TIJERA.png" />
                      </image>
                   </ImageView>
                </children>
@@ -93,7 +93,7 @@
                      <children>
                         <ImageView fitHeight="40.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="/imagenes/casillero-5.png" />
+                              <Image url="@../imagenes/casillero-5.png" />
                            </image>
                         </ImageView>
                         <HBox fx:id="playerResultBox" alignment="CENTER" spacing="10.0" StackPane.alignment="CENTER">
@@ -115,7 +115,7 @@
                      <children>
                         <ImageView fitHeight="40.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="/imagenes/casillero-5.png" />
+                              <Image url="@../imagenes/casillero-5.png" />
                            </image>
                         </ImageView>
                         <HBox fx:id="botResultBox" alignment="CENTER" spacing="10.0" StackPane.alignment="CENTER">

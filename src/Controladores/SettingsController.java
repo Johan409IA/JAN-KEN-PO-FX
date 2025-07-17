@@ -27,18 +27,19 @@ public class SettingsController {
         renameButton.disableProperty().bind(savedGamesListView.getSelectionModel().selectedItemProperty().isNull());
         deleteButton.disableProperty().bind(savedGamesListView.getSelectionModel().selectedItemProperty().isNull());
     }
+    
+    @FXML
+    void handleThemeToggle(ActionEvent event) {
+        MainApp.setTheme(darkThemeToggle.isSelected());
+        updateToggleButtonText();
+    }
 
     private void loadSavedGames() {
         savedGamesListView.setItems(FXCollections.observableArrayList(GameSaveService.getSavedGameNames()));
     }
 
     // --- CAMBIO CLAVE: Lógica de cambio de tema ---
-    @FXML
-    void handleThemeToggle(ActionEvent event) {
-        boolean isSelected = darkThemeToggle.isSelected();
-        MainApp.setTheme(isSelected); // Llama al método centralizado
-        updateToggleButtonText(); // Actualiza el texto del botón
-    }
+    
 
     // --- NUEVO: Método para actualizar el texto del botón ---
     private void updateToggleButtonText() {

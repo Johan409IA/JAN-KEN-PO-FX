@@ -15,12 +15,18 @@
     ================================================================================
     La ruta es el nombre del paquete seguido por el nombre de la clase: "Controladores.MenuController"
 -->
-<AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="root-pane" stylesheets="@/estilos/menu-estilos.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.MenuController">
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="root-pane" stylesheets="@/estilos/menu-estilos.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.MenuController">
    <children>
       <VBox alignment="CENTER" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
+            <ImageView fitHeight="98.0" fitWidth="143.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../imagenes/imagen-inicio.png" />
+               </image>
+            </ImageView>
             <Label styleClass="title-label" text="BIENVENIDO A JAN KEN PO" />
-            <VBox alignment="CENTER" prefWidth="100.0" spacing="15.0">
+            <VBox alignment="CENTER" prefHeight="466.0" prefWidth="760.0" spacing="15.0">
                <children>
                   <!-- Asegúrate de que onAction apunte al método correcto -->
                   <Button mnemonicParsing="false" onAction="#handleIniciarPartida" styleClass="menu-button" text="Iniciar Partida" />
@@ -36,9 +42,9 @@
       </VBox>
       <StackPane fx:id="exitButton" onMouseClicked="#handleExit" styleClass="exit-button" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
          <children>
-            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" styleClass="exit-icon">
+            <ImageView fitHeight="52.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true" styleClass="exit-icon">
                <image>
-                  <Image url="/imagenes/cerrar.png" />
+                  <Image url="@../imagenes/cerrar.png" />
                </image>
             </ImageView>
          </children>

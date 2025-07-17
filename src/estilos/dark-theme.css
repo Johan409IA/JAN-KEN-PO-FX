@@ -1,34 +1,42 @@
 /* --- TEMA NEÓN PÚRPURA/CIAN (MODO OSCURO) --- */
 
-/* Sobre-escribe el fondo del panel raíz */
 .root-pane {
-    /* Gradiente radial de púrpura oscuro a negro */
-    -fx-background-color: radial-gradient(center 50% 50%, radius 50%, #2e0a2e, #000000);
+    -fx-background-color: radial-gradient(center 50% 50%, radius 65%, #4b1b4b, #000000);
 }
 
-/* Sobre-escribe el estilo del título principal */
+/* Título con sombra púrpura más sutil */
 .title-label {
-    /* Efecto de brillo neón púrpura/magenta */
-    -fx-effect: dropshadow(gaussian, #ff00ff, 25, 0.9, 0, 0);
+    -fx-effect: dropshadow(gaussian, #ff00ff, 15, 0.5, 0, 0);
 }
 
-/* Sobre-escribe el estilo de los botones del menú */
+/* Botón de menú en estado normal */
 .menu-button {
-    -fx-text-fill: #e0c0ff; /* Texto lavanda pálido */
-    /* Borde neón cian/turquesa */
+    -fx-text-fill: #e0c0ff;
     -fx-border-color: #00ffff;
 }
 
-/* Sobre-escribe el efecto hover de los botones */
+/* Botón al hacer hover - efecto suavizado */
 .menu-button:hover {
-    -fx-background-color: #00ffff; /* El fondo se llena de color cian */
-    -fx-effect: dropshadow(gaussian, #00ffff, 15, 0.7, 0, 0); /* Brillo exterior cian */
+    -fx-background-color: #00ffff;
+    -fx-effect: dropshadow(gaussian, #00ffff, 8, 0.4, 0, 0);
 }
 
-/* Sobre-escribe el icono de salida */
+/* Ícono de salida (por defecto) */
 .exit-button .exit-icon {
-    -fx-fill: #00ffff; /* Icono de color cian */
+    -fx-fill: #00ffff;
+    -fx-opacity: 0.8;
+    -fx-effect: dropshadow(gaussian, #00ffff, 3, 0.2, 0, 0);
+    -fx-transition: all 0.2s ease-in-out;
 }
+
+/* Ícono de salida al hacer hover - brillo más tenue */
+.exit-button:hover .exit-icon {
+    -fx-opacity: 1.0;
+    -fx-effect: dropshadow(gaussian, white, 5, 0.3, 0, 0);
+}
+
+
+
 
 /* --- Estilos de Configuración para el Tema Oscuro --- */
 

@@ -1,42 +1,42 @@
 /* Estilo para las elecciones del jugador */
 .choice-image {
-    -fx-effect: dropshadow(gaussian, #00FF00, 15, 0.7, 0, 0);
+    -fx-effect: dropshadow(gaussian, #00FF00, 12, 0.5, 0, 0); /* antes: 15, 0.7 */
     -fx-cursor: hand;
 }
 .choice-image:hover {
-    -fx-effect: dropshadow(gaussian, #00FF00, 25, 0.9, 0, 0);
+    -fx-effect: dropshadow(gaussian, #00FF00, 18, 0.6, 0, 0); /* antes: 25, 0.9 */
 }
 
-/* **NUEVO** Estilo para las elecciones del bot (siempre visibles) */
+/* Elección del bot (no se cambia, ya está equilibrado) */
 .bot-choice-image {
-    -fx-opacity: 0.6; /* Un poco atenuadas por defecto */
+    -fx-opacity: 0.6;
     -fx-effect: dropshadow(gaussian, #E0E0E0, 10, 0.5, 0, 0);
 }
 
-/* **NUEVO** Estilo para la elección seleccionada del bot */
+/* Elección seleccionada del bot (brillo dorado suavizado) */
 .bot-choice-selected {
     -fx-opacity: 1.0;
-    -fx-effect: dropshadow(gaussian, #FFD700, 25, 0.9, 0, 0);
+    -fx-effect: dropshadow(gaussian, #FFD700, 18, 0.6, 0, 0); /* antes: 25, 0.9 */
 }
 
-/* Estilo para el botón de pausa */
+/* Botón de pausa (hover con brillo blanco más suave) */
 .pause-icon-button {
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.2, 0, 0);
     -fx-cursor: hand;
 }
 .pause-icon-button:hover {
-    -fx-effect: dropshadow(gaussian, #FFFFFF, 15, 0.8, 0, 0);
+    -fx-effect: dropshadow(gaussian, #FFFFFF, 10, 0.5, 0, 0); /* antes: 15, 0.8 */
 }
 
-/* **NUEVO** Estilo para el label del temporizador (solo texto neón) */
+/* Temporizador con efecto neón más controlado */
 .timer-label-neon {
     -fx-text-fill: white;
     -fx-font-family: "Arial Black", sans-serif;
     -fx-font-size: 28px;
-    -fx-effect: dropshadow(gaussian, #00FF00, 15, 0.8, 0, 0);
+    -fx-effect: dropshadow(gaussian, #00FF00, 10, 0.5, 0, 0); /* antes: 15, 0.8 */
 }
 
-/* **NUEVO** Estilo para las etiquetas de puntuación (Jugador: 0) */
+/* Etiquetas de puntuación (no se cambian, ya son suaves) */
 .score-label {
     -fx-text-fill: white;
     -fx-font-family: "Arial Black", sans-serif;

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="root-pane" stylesheets="@/estilos/menu-estilos.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.SettingsController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="root-pane" stylesheets="@../estilos/menu-estilos.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controladores.SettingsController">
    <children>
       <VBox alignment="TOP_CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <padding>
@@ -24,7 +24,7 @@
                   <Label styleClass="settings-subtitle" text="Apariencia" />
                   <HBox alignment="CENTER_LEFT" spacing="15.0">
                      <children>
-                        <Label styleClass="settings-label" text="Tema Neón Oscuro:" />
+                        <Label styleClass="settings-label" text="Cambiar tema:" />
                         <ToggleButton fx:id="darkThemeToggle" mnemonicParsing="false" onAction="#handleThemeToggle" text="Desactivado" />
                      </children>
                   </HBox>
