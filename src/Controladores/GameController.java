@@ -2,10 +2,10 @@ package Controladores;
 
 import app.com.juegofx.juego.MainApp;
 import app.com.juegofx.juego.Model.Eleccion;
-import app.com.juegofx.juego.Model.GameState;
 import app.com.juegofx.juego.Model.LogicaJuego;
 import app.com.juegofx.juego.Model.Resultado;
-import app.com.juegofx.juego.service.GameSaveService; // <-- Importar el nuevo servicio
+import app.com.juegofx.juego.Model.GameState;
+import app.com.juegofx.juego.service.GameSaveService;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -28,7 +28,7 @@ import java.util.Optional;
 
 public class GameController {
 
-    // --- FXML Elements and other fields remain the same ---
+    // --- FXML Elements ---
     @FXML private VBox playerChoiceBox;
     @FXML private Label roundResultText, choicesMadeText, playerScoreLabel, botScoreLabel, timerLabel;
     @FXML private ImageView playerPaper, playerPiedra, playerTijera;
@@ -39,41 +39,66 @@ public class GameController {
     private List<ImageView> botResultIcons;
     @FXML private ImageView pauseButton;
 
+    // --- Logic and Resources ---
     private LogicaJuego gameLogic;
     private Timeline timeline;
     private int timeSeconds = 0;
-    private Map<Eleccion, ImageView> botChoiceMap;
+        private Map<Eleccion, ImageView> botChoiceMap;
     
+    // --- CAMBIO CLAVE: Las imágenes se declaran aquí pero se inicializan en initialize() ---
     private Image CHECK_ICON;
     private Image X_ICON;
     private Image DASH_ICON;
-    
-    // --- Initialize, Start/Load Game, and other methods remain the same ---
+
+    // --- Initialization ---
     @FXML
     public void initialize() {
+        // --- CAMBIO CLAVE: Cargar imágenes de forma segura en initialize() ---
         try {
             CHECK_ICON = loadImage("/imagenes/check-casilla.png");
             X_ICON = loadImage("/imagenes/X-casilla.png");
             DASH_ICON = loadImage("/imagenes/raya-casilla.png");
         } catch (NullPointerException e) {
-            System.err.println("Error: No se pudo cargar una de las imágenes de resultado. Verifica los nombres de los archivos.");
+            System.err.println("ERROR CRÍTICO: " + e.getMessage());
+            // Opcional: Mostrar un Alert al usuario y cerrar la aplicación para evitar más errores.
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Error de Carga");
+            errorAlert.setHeaderText("No se pudieron cargar los recursos del juego.");
+            errorAlert.setContentText("Verifica que todos los archivos de imagen estén en la carpeta 'imagenes' y que sus nombres sean correctos.");
+            errorAlert.showAndWait();
             Platform.exit();
             return;
         }
-        gameLogic = new LogicaJuego();
+
+            gameLogic = new LogicaJuego();
+        
         playerResultIcons = Arrays.asList(playerResult1, playerResult2, playerResult3, playerResult4, playerResult5);
         botResultIcons = Arrays.asList(botResult1, botResult2, botResult3, botResult4, botResult5);
+        
         botChoiceMap = Map.of(Eleccion.PAPEL, botPaper, Eleccion.PIEDRA, botPiedra, Eleccion.TIJERA, botTijera);
     }
     
+    // --- NUEVO: Método de utilidad para cargar imágenes de forma segura ---
     private Image loadImage(String path) {
         InputStream stream = getClass().getResourceAsStream(path);
-        Objects.requireNonNull(stream, "No se puede encontrar el recurso: " + path);
+        // Lanza una excepción con un mensaje claro si el archivo no se encuentra
+        Objects.requireNonNull(stream, "No se puede encontrar el recurso de imagen en la ruta: " + path);
         return new Image(stream);
     }
     
-    public void startNewGame() { setupInitialGame(null); }
-    public void loadGame(GameState state) { setupInitialGame(state); }
+    // --- Métodos para iniciar el juego (sin cambios) ---
+    public void startNewGame() {
+        setupInitialGame(null);
+    }
+    
+    public void loadGame(GameState state) {
+        setupInitialGame(state);
+    }
+
+    // El resto de la clase permanece exactamente igual que en la versión anterior que te proporcioné.
+    // Pega el resto de los métodos aquí:
+    // setupInitialGame, handlePlayerChoice, handlePause, endGame, displayRoundResult,
+    // updateScoreboard, updateUIForNewRound, setupTimer, setPlayerChoicesClickable
     
     private void setupInitialGame(GameState state) {
         if (state != null) { gameLogic.loadState(state); } 
@@ -94,10 +119,9 @@ public class GameController {
         displayRoundResult(playerChoice, botChoice);
     }
 
-    // --- CAMBIO CLAVE: Lógica de Pausa actualizada ---
     @FXML
     private void handlePause() {
-        timeline.pause();
+        if (timeline != null) timeline.pause();
         setPlayerChoicesClickable(false);
 
         Alert pauseDialog = new Alert(Alert.AlertType.CONFIRMATION);
@@ -113,26 +137,22 @@ public class GameController {
         Optional<ButtonType> result = pauseDialog.showAndWait();
         if (result.isPresent()) {
             if (result.get() == saveAndExitButton) {
-                // Llama al nuevo método de guardado automático
                 GameSaveService.saveGameAutomatically(gameLogic.saveState());
                 MainApp.switchToMenuScreen();
             } else if (result.get() == exitWithoutSavingButton) {
                 MainApp.switchToMenuScreen();
-            } else { // Si es "Regresar" o se cierra el diálogo
-                timeline.play();
+            } else { 
+                if (timeline != null) timeline.play();
                 setPlayerChoicesClickable(true);
             }
         } else {
-            // Comportamiento por defecto si se cierra el diálogo
-            timeline.play();
+            if (timeline != null) timeline.play();
             setPlayerChoicesClickable(true);
         }
     }
     
-    // El resto de los métodos (endGame, displayRoundResult, updateScoreboard, etc.) permanecen igual que antes.
-    // ... pégalos aquí desde la versión anterior ...
     private void endGame() {
-        timeline.stop();
+        if (timeline != null) timeline.stop();
         setPlayerChoicesClickable(false);
 
         Platform.runLater(() -> {

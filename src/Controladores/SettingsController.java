@@ -18,15 +18,12 @@ public class SettingsController {
 
     @FXML
     public void initialize() {
-        // Cargar el estado actual del tema
         boolean isDarkTheme = MainApp.isDarkThemeActive();
         darkThemeToggle.setSelected(isDarkTheme);
-        darkThemeToggle.setText(isDarkTheme ? "Activado" : "Desactivado");
+        updateToggleButtonText(); // <-- Usar un método para actualizar el texto
 
-        // Poblar la lista de partidas guardadas
         loadSavedGames();
         
-        // Deshabilitar botones si no hay nada seleccionado
         renameButton.disableProperty().bind(savedGamesListView.getSelectionModel().selectedItemProperty().isNull());
         deleteButton.disableProperty().bind(savedGamesListView.getSelectionModel().selectedItemProperty().isNull());
     }
@@ -35,11 +32,21 @@ public class SettingsController {
         savedGamesListView.setItems(FXCollections.observableArrayList(GameSaveService.getSavedGameNames()));
     }
 
+    // --- CAMBIO CLAVE: Lógica de cambio de tema ---
     @FXML
     void handleThemeToggle(ActionEvent event) {
         boolean isSelected = darkThemeToggle.isSelected();
-        MainApp.setDarkTheme(isSelected);
-        darkThemeToggle.setText(isSelected ? "Activado" : "Desactivado");
+        MainApp.setTheme(isSelected); // Llama al método centralizado
+        updateToggleButtonText(); // Actualiza el texto del botón
+    }
+
+    // --- NUEVO: Método para actualizar el texto del botón ---
+    private void updateToggleButtonText() {
+        if (darkThemeToggle.isSelected()) {
+            darkThemeToggle.setText("Activado");
+        } else {
+            darkThemeToggle.setText("Desactivado");
+        }
     }
 
     @FXML
@@ -55,7 +62,7 @@ public class SettingsController {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(newName -> {
             if (GameSaveService.renameGame(selectedGame, newName)) {
-                loadSavedGames(); // Refrescar la lista
+                loadSavedGames();
             } else {
                 showError("No se pudo renombrar la partida.");
             }
@@ -75,7 +82,7 @@ public class SettingsController {
         Optional<ButtonType> result = confirmation.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             if (GameSaveService.deleteGame(selectedGame)) {
-                loadSavedGames(); // Refrescar la lista
+                loadSavedGames();
             } else {
                 showError("No se pudo eliminar la partida.");
             }
