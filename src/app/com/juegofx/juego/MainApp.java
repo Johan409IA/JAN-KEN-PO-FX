@@ -1,7 +1,9 @@
 package app.com.juegofx.juego;
 
 import Controladores.GameController;
+import Controladores.MultiplayerController;
 import app.com.juegofx.juego.Model.GameState;
+import app.com.juegofx.juego.multiplayer.ClienteJuego;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -25,7 +27,7 @@ public class MainApp extends Application {
         primaryStage = stage;
         primaryStage.setTitle("Jan Ken Po");
         primaryStage.setResizable(false);
-        
+
         initRootLayout();
         switchToMenuScreen();
     }
@@ -36,12 +38,41 @@ public class MainApp extends Application {
         Scene scene = new Scene(rootLayout, 800, 600);
         primaryStage.setScene(scene);
         applyTheme(); // Aplica el tema por defecto
+        
+        // --- CAMBIO CLAVE AQUÍ ---
+        // Cambiar 'primaryStageTheme' a 'primaryStage'
         primaryStage.show();
     }
-    
+
+    public static void switchToMultiplayerScreen(ClienteJuego cliente) {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/Vista/MultiplayerScreen.fxml"));
+            Parent multiplayerRoot = loader.load();
+
+            // Inyectar el cliente en el controlador
+            MultiplayerController controller = loader.getController();
+            controller.setCliente(cliente);
+
+            // Colocar la vista multijugador en el centro de nuestro BorderPane raíz
+            rootLayout.setCenter(multiplayerRoot);
+
+            // Re-aplicar el tema al BorderPane raíz. Esto asegurará que la nueva vista
+            // herede los estilos correctos (tema por defecto o tema oscuro).
+            applyTheme(); // <-- ¡CORRECTO! Sin parámetros.
+
+            primaryStage.setTitle("Jan Ken Po - Multijugador");
+            // No creamos una nueva escena, seguimos usando la principal.
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     // --- LÓGICA DE TEMAS SIMPLIFICADA ---
     private static void applyTheme() {
-        if (rootLayout == null) return;
+        if (rootLayout == null) {
+            return;
+        }
         rootLayout.getStylesheets().clear();
 
         URL baseCssUrl = MainApp.class.getResource("/estilos/menu-estilos.css");
@@ -56,7 +87,7 @@ public class MainApp extends Application {
             }
         }
     }
-    
+
     public static void setTheme(boolean useDarkTheme) {
         isDarkTheme = useDarkTheme;
         applyTheme(); // Vuelve a aplicar los estilos al panel raíz
@@ -85,7 +116,7 @@ public class MainApp extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/Vista/GameScreen.fxml"));
             Parent gameRoot = loader.load();
-            
+
             GameController controller = loader.getController();
             if (loadedState != null) {
                 controller.loadGame(loadedState);
@@ -95,10 +126,10 @@ public class MainApp extends Application {
 
             // La pantalla de juego tiene su propio estilo y reemplaza todo el centro
             rootLayout.setCenter(gameRoot);
-            
+
             // Aplicar el estilo de juego directamente al panel del juego
             URL gameCssUrl = MainApp.class.getResource("/estilos/game-estilos.css");
-            if(gameCssUrl != null) {
+            if (gameCssUrl != null) {
                 gameRoot.getStylesheets().add(gameCssUrl.toExternalForm());
             }
 
@@ -107,7 +138,15 @@ public class MainApp extends Application {
         }
     }
 
-    public static Stage getPrimaryStage() { return primaryStage; }
-    public static boolean isDarkThemeActive() { return isDarkTheme; }
-    public static void main(String[] args) { launch(args); }
+    public static Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public static boolean isDarkThemeActive() {
+        return isDarkTheme;
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
