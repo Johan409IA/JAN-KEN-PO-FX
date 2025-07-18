@@ -1,9 +1,9 @@
-/*
+ /*
  * Empty Stylesheet file.
  */
 
 .root {
-    -fx-background-image: url(../Imagen/fondo-inicio.jpg);
+    -fx-background-image: url(../Imagen/fondo-verde.jpg);
     -fx-background-size: cover;          /* Cubre toda la pantalla */
     -fx-background-position: center;     /* Centra la imagen */
     -fx-background-repeat: no-repeat;    /* No repite la imagen */

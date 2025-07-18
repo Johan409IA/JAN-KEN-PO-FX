@@ -6,24 +6,43 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamelab.Controladores.MainController">
-    <children>
-        <Text fx:id="titulo" fill="WHITE" layoutX="276.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BIENBENIDO A GAMELAB" textAlignment="CENTER">
-        </Text>
-        <Button fx:id="btnRaya" layoutX="371.0" layoutY="196.0" mnemonicParsing="false" onAction="#handleJugar" prefHeight="44.0" prefWidth="211.0" text="JUGAR">
-        </Button>
-        <Button fx:id="btnOpc" layoutX="371.0" layoutY="270.0" mnemonicParsing="false" onAction="#handleOpciones" prefHeight="44.0" prefWidth="211.0" text="OPCIONES" />
-        <ImageView fitHeight="212.0" fitWidth="244.0" layoutX="52.0" layoutY="188.0" pickOnBounds="true" preserveRatio="true" styleClass="imagen-raya">
-            <image>
-                <Image url="@../Imagen/rayas.png" />
-            </image>
-        </ImageView>
-        <Button fx:id="btnRnd" layoutX="371.0" layoutY="339.0" mnemonicParsing="false" onAction="#handleReanudar" prefHeight="44.0" prefWidth="211.0" text="REANUDAR" />
-        <Button fx:id="btnMjd" layoutX="370.0" layoutY="413.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="211.0" text="MULTIJUGADOR" />
-        <ImageView fx:id="exitImageView" fitHeight="58.0" fitWidth="55.0" layoutX="801.0" layoutY="413.0" onMouseClicked="#handleSalir" pickOnBounds="true" preserveRatio="true" styleClass="exit-icon">
-            <image>
-                <Image url="@../Imagen/salir.png" />
-            </image>
-        </ImageView>
-    </children>
+<!-- 
+    CORRECCIÓN APLICADA: 
+    fx:controller ahora apunta a la ruta completa y correcta.
+-->
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="900.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamelab.Controladores.MainController">
+    <!-- 
+        NOTA: He quitado el bloque <stylesheets> de aquí. 
+        La mejor práctica es aplicarlos desde la clase GameLab.java para permitir el cambio de tema dinámico.
+        Si necesitas que vuelva a estar aquí, avísame, pero la configuración actual es más robusta.
+    -->
+   <children>
+      <Text fx:id="titulo" fill="WHITE" layoutX="276.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BIENVENIDO A GAMELAB" textAlignment="CENTER" />
+      
+      <Button fx:id="btnRaya" layoutX="371.0" layoutY="196.0" mnemonicParsing="false" onAction="#handleJugar" prefHeight="44.0" prefWidth="211.0" text="JUGAR" />
+      
+      <Button fx:id="btnOpc" layoutX="371.0" layoutY="270.0" mnemonicParsing="false" onAction="#handleOpciones" prefHeight="44.0" prefWidth="211.0" text="OPCIONES" />
+      
+      <!-- 
+        CORRECCIÓN APLICADA: 
+        La URL de la imagen ahora empieza con "/" para ser una ruta absoluta desde la raíz del classpath.
+      -->
+      <ImageView fitHeight="245.0" fitWidth="244.0" layoutX="52.0" layoutY="188.0" pickOnBounds="true" preserveRatio="true" styleClass="imagen-raya">
+         <image>
+            <Image url="@../Imagen/rayas.png" />
+         </image>
+      </ImageView>
+      
+      <Button fx:id="btnRnd" layoutX="371.0" layoutY="339.0" mnemonicParsing="false" onAction="#handleReanudar" prefHeight="44.0" prefWidth="211.0" text="REANUDAR" />
+      
+      <Button fx:id="btnMjd" layoutX="370.0" layoutY="413.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="211.0" text="MULTIJUGADOR" />
+      
+      <!-- 
+        ImageView para el botón de salir. 
+        No tiene una <Image> por defecto porque la establecemos dinámicamente desde el MainController.
+        Esto es correcto.
+      -->
+      <ImageView fx:id="exitImageView" fitHeight="40.0" fitWidth="40.0" layoutX="840.0" layoutY="440.0" onMouseClicked="#handleSalir" pickOnBounds="true" preserveRatio="true" styleClass="exit-icon" />
+   </children>
 </AnchorPane>

@@ -1,20 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package gamelab.Controladores;
 
 import gamelab.Modelo.Preferencias;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
-import gamelab.GameLab;
-import javafx.scene.Scene;
-
 
 public class ConfiguracionController implements Initializable {
 
@@ -23,49 +25,33 @@ public class ConfiguracionController implements Initializable {
     @FXML private RadioButton radioFichaX;
     @FXML private RadioButton radioFichaO;
     @FXML private ToggleGroup fichaToggleGroup;
-    @FXML private Button btnGuardar;
-    @FXML private Button btnCancelar;
     @FXML private Label lblStatus;
-    
-    
-    private MainController mainController;
-    //private MainController mainController;
-    private Scene mainScene; // Variable para guardar la referencia a la escena principal
 
+    // --- Variables de Lógica ---
     private Preferencias preferenciasActuales;
-    private final String RUTA_ARCHIVO = "preferencias.dat"; // Archivo donde se guardarán los datos
-    
-    // --- NUEVO MÉTODO SETTER ---
-    /**
-     * Establece la escena principal para que este controlador pueda modificarla.
-     * @param scene La escena del menú principal.
-     */
-    public void setMainScene(Scene scene) {
-        this.mainScene = scene;
-    }
+    private MainController mainController; // Referencia para notificar cambios
+    private final String RUTA_ARCHIVO = "preferencias.dat";
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // 1. Configurar las opciones disponibles en los controles
         comboTema.getItems().addAll(Preferencias.TEMA_CLARO, Preferencias.TEMA_OSCURO);
-        
-        // 2. Cargar las preferencias existentes
         cargarPreferencias();
-        
-        // 3. Mostrar las preferencias cargadas en la interfaz
         actualizarVista();
+    }
+    
+    /**
+     * Permite que el controlador principal se identifique para poder notificarle los cambios.
+     * @param mainController La instancia del MainController.
+     */
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
     }
 
     private void cargarPreferencias() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(RUTA_ARCHIVO))) {
             preferenciasActuales = (Preferencias) ois.readObject();
-            System.out.println("Preferencias cargadas exitosamente.");
-        } catch (FileNotFoundException e) {
-            System.out.println("Archivo de preferencias no encontrado. Creando nuevas por defecto.");
-            preferenciasActuales = new Preferencias();
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Error al leer el archivo de preferencias. Usando valores por defecto.");
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Archivo de preferencias no encontrado o corrupto. Creando nuevas por defecto.");
             preferenciasActuales = new Preferencias();
         }
     }
@@ -78,80 +64,39 @@ public class ConfiguracionController implements Initializable {
             radioFichaO.setSelected(true);
         }
     }
-    
-     // --- NUEVO MÉTODO ---
-    /**
-     * Permite que el controlador que abre esta ventana (MainController)
-     * se identifique a sí mismo.
-     * @param mainController La instancia del controlador principal.
-     */
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
-    }
 
     @FXML
-    private void handleGuardar() {
+    private void handleGuardar(ActionEvent event) {
         // 1. Recoger los nuevos valores de la vista
         preferenciasActuales.setTema(comboTema.getValue());
-        
         RadioButton selectedRadio = (RadioButton) fichaToggleGroup.getSelectedToggle();
-        if (selectedRadio.equals(radioFichaX)) {
-            preferenciasActuales.setFichaPreferida(Preferencias.FICHA_X);
-        } else {
-            preferenciasActuales.setFichaPreferida(Preferencias.FICHA_O);
-        }
+        preferenciasActuales.setFichaPreferida(selectedRadio.getText().contains("X") ? Preferencias.FICHA_X : Preferencias.FICHA_O);
 
         // 2. Guardar el objeto de preferencias en el archivo
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(RUTA_ARCHIVO))) {
             oos.writeObject(preferenciasActuales);
-            System.out.println("Preferencias guardadas exitosamente en " + RUTA_ARCHIVO);
+            System.out.println("Preferencias guardadas exitosamente.");
             
-            // 3. Aplicar tema si es necesario (ejemplo) y cerrar la ventana
-            // --- INICIO DE LA MODIFICACIÓN ---
-            
-            if (mainScene != null) {
-                GameLab.aplicarTema(mainScene, preferenciasActuales.getTema());
-                System.out.println("Tema CSS aplicado directamente a la escena principal.");
-            } else {
-                System.err.println("Error: La referencia a mainScene es nula. No se pudo cambiar el tema.");
+            // 3. Notificar al MainController para que actualice su propia vista
+            if (mainController != null) {
+                mainController.actualizarVistaDesdePreferencias(preferenciasActuales);
             }
 
-            // 2. Notificar al MainController que actualice su ícono (esto se mantiene igual)
-            if (mainController != null) {
-                mainController.setExitIconForTheme(preferenciasActuales.getTema());
-            }
-            cerrarVentana();
+            cerrarVentana(event);
 
         } catch (IOException e) {
-            System.err.println("Error al guardar las preferencias.");
             e.printStackTrace();
             lblStatus.setText("Error al guardar.");
         }
     }
-    
-    // Este método es un ejemplo de cómo podrías aplicar el tema.
-    // Necesitaría acceso a la escena principal para funcionar.
-    private void aplicarTema(String tema) {
-        System.out.println("Aplicando tema: " + tema);
-        // Aquí iría la lógica para cambiar el CSS de la aplicación dinámicamente.
-        // Por ejemplo:
-        // Stage stage = (Stage) btnGuardar.getScene().getWindow();
-        // stage.getOwner().getScene().getStylesheets().clear();
-        // if(tema.equals(Preferencias.TEMA_OSCURO)) {
-        //    stage.getOwner().getScene().getStylesheets().add(getClass().getResource("dark-theme.css").toExternalForm());
-        // } else {
-        //    stage.getOwner().getScene().getStylesheets().add(getClass().getResource("main.css").toExternalForm());
-        // }
-    }
 
     @FXML
-    private void handleCancelar() {
-        cerrarVentana();
+    private void handleCancelar(ActionEvent event) {
+        cerrarVentana(event);
     }
 
-    private void cerrarVentana() {
-        // Obtenemos el Stage (la ventana) actual y la cerramos.
-        Stage stage = (Stage) btnCancelar.getScene().getWindow();
+    private void cerrarVentana(ActionEvent event) {
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         stage.close();
     }
 }
