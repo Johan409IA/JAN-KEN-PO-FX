@@ -27,11 +27,16 @@ import javafx.stage.Stage;
 public class MainController implements Initializable {
 
     // --- Componentes FXML Vinculados ---
-    @FXML private Button btnRaya;
-    @FXML private Button btnOpc;
-    @FXML private Button btnRnd;
-    @FXML private Button btnMjd;
-    @FXML private ImageView exitImageView;
+    @FXML
+    private Button btnRaya;
+    @FXML
+    private Button btnOpc;
+    @FXML
+    private Button btnRnd;
+    @FXML
+    private Button btnMjd;
+    @FXML
+    private ImageView exitImageView;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -39,7 +44,6 @@ public class MainController implements Initializable {
     }
 
     // --- MANEJADORES DE EVENTOS ---
-
     @FXML
     private void handleJugar(ActionEvent event) {
         try {
@@ -52,14 +56,14 @@ public class MainController implements Initializable {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gamelab/Juego.fxml"));
             Parent root = loader.load();
-            
+
             JuegoController juegoController = loader.getController();
             juegoController.initPartida(true, prefs.getFichaPreferida());
-            
+
             Stage gameStage = new Stage();
             gameStage.setTitle("Tic-Tac-Toe vs Bot");
             gameStage.setScene(new Scene(root));
-            
+
             ((Stage) btnRaya.getScene().getWindow()).close();
             gameStage.show();
         } catch (IOException e) {
@@ -72,21 +76,21 @@ public class MainController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gamelab/Configuracion.fxml"));
             Parent root = loader.load();
-            
+
             ConfiguracionController configController = loader.getController();
             // Le pasamos la referencia de este controlador para que nos pueda notificar
             configController.setMainController(this);
-            
+
             // Creamos y configuramos la nueva ventana (Stage)
             Stage configuracionStage = new Stage();
             configuracionStage.setTitle("Configuración");
             configuracionStage.initModality(Modality.APPLICATION_MODAL);
             configuracionStage.initOwner((Stage) btnOpc.getScene().getWindow());
             configuracionStage.setScene(new Scene(root));
-            
+
             // Mostramos la ventana y esperamos a que se cierre
             configuracionStage.showAndWait();
-            
+
         } catch (IOException e) {
             e.printStackTrace();
             // Mostrar una alerta de error si falla la carga
@@ -102,11 +106,11 @@ public class MainController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gamelab/ReanudarPartida.fxml"));
             Parent root = loader.load();
-            
+
             ReanudarPartidaController reanudarController = loader.getController();
             Stage currentStage = (Stage) btnRnd.getScene().getWindow();
             reanudarController.setMainStage(currentStage);
-            
+
             Stage stage = new Stage();
             stage.setTitle("Reanudar Partida");
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -132,7 +136,6 @@ public class MainController implements Initializable {
     }
 
     // --- MÉTODOS PÚBLICOS ---
-
     public void setExitIconForTheme(String theme) {
         String imagePath = Preferencias.TEMA_OSCURO.equals(theme) ? "/Imagen/salir-oscuro.png" : "/Imagen/salir.png";
         try {
@@ -142,15 +145,41 @@ public class MainController implements Initializable {
             System.err.println("Error: No se pudo encontrar el ícono de salida en la ruta: " + imagePath);
         }
     }
-    
+
     public void actualizarVistaDesdePreferencias(Preferencias prefs) {
-        if (prefs == null) return;
-        
-        Scene currentScene = btnOpc.getScene(); 
+        if (prefs == null) {
+            return;
+        }
+
+        Scene currentScene = btnOpc.getScene();
         if (currentScene != null) {
             GameLab.aplicarTema(currentScene, prefs.getTema());
         }
-        
+
         setExitIconForTheme(prefs.getTema());
+    }
+
+    @FXML
+    private void handleMultijugador(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gamelab/MultijugadorMenu.fxml"));
+            Parent root = loader.load();
+            
+            // --- INICIO DE LA CORRECCIÓN: Pasar la referencia del Stage principal ---
+            MultijugadorMenuController menuController = loader.getController();
+            Stage mainStage = (Stage) btnMjd.getScene().getWindow();
+            menuController.setMainStage(mainStage);
+            // --- FIN DE LA CORRECCIÓN ---
+
+            Stage stage = new Stage();
+            stage.setTitle("Multijugador");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(mainStage);
+            stage.setScene(new Scene(root));
+            stage.show();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

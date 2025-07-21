@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import gamelab.Red.ClienteJuego; 
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -33,6 +34,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+
 public class JuegoController implements Initializable {
 
     // --- Componentes FXML Vinculados ---
@@ -43,12 +45,14 @@ public class JuegoController implements Initializable {
     @FXML private Label lblNombreHumano;
     @FXML private Label lblNombreBot;
     @FXML private Label lblCronometro;
+    
 
     // --- Celdas del Tablero Vinculadas ---
     @FXML private ImageView cell00, cell01, cell02;
     @FXML private ImageView cell10, cell11, cell12;
     @FXML private ImageView cell20, cell21, cell22;
     private ImageView[][] celdasTablero;
+    
 
     // --- Variables de Estado del Juego ---
     private Partida partida;
@@ -56,6 +60,9 @@ public class JuegoController implements Initializable {
     private int segundos;
     private List<String> resultadosRondas;
     private Image imagenX, imagenO, imagenCheck, imagenCruz, imagenGuion;
+    private ClienteJuego clienteRed;
+    private boolean isMultiplayer = false;
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -85,24 +92,32 @@ public class JuegoController implements Initializable {
     
     // --- Métodos de Inicialización de Partida ---
     
-     public void initPartida(boolean contraBot, String fichaHumano) {
+    public void initPartida(boolean contraBot, String fichaHumano) {
+        this.isMultiplayer = false;
         this.partida = new Partida(contraBot, fichaHumano);
         iniciarJuego();
     }
 
 
     public void initPartidaCargada(Partida partidaCargada) {
+        this.isMultiplayer = false;
         this.partida = partidaCargada;
         iniciarJuego();
     }
     
     private void iniciarJuego() {
-        lblNombreHumano.setText("JUGADOR (" + (partida.getJugadorActual().equals("X") ? "X" : "O") + ")");
+        // --- INICIO DE LA CORRECCIÓN DEL BUG VISUAL ---
+        // Usamos los getters del modelo que son la fuente de verdad.
+        lblNombreHumano.setText("JUGADOR (" + partida.getJugadorHumano() + ")");
         lblNombreBot.setText("BOT (" + partida.getJugadorBot() + ")");
+        // --- FIN DE LA CORRECCIÓN ---
+        
         actualizarVistaCompleta();
         cronometro.play();
         verificarTurnoBotInicial();
     }
+    
+    
     
     private void verificarTurnoBotInicial(){
         if(partida.isContraBot() && partida.getJugadorActual().equals(partida.getJugadorBot())) {
@@ -117,16 +132,54 @@ public class JuegoController implements Initializable {
         ImageView clickedCell = (ImageView) event.getSource();
         Integer fila = GridPane.getRowIndex(clickedCell);
         Integer col = GridPane.getColumnIndex(clickedCell);
-
         if (fila == null || col == null) return;
 
-        if (partida.isRondaTerminada() || (partida.isContraBot() && partida.getJugadorActual().equals(partida.getJugadorBot()))) {
-            return;
+        if (isMultiplayer) {
+            try {
+                // En multijugador, solo enviamos el movimiento
+                clienteRed.enviarMovimiento(fila, col);
+            } catch (IOException e) {
+                mostrarAlertaError("Error de Red", "No se pudo enviar el movimiento.");
+            }
+        } else { // Modo un jugador
+            if (partida.isRondaTerminada() || (partida.isContraBot() && partida.getJugadorActual().equals(partida.getJugadorBot()))) {
+                return;
+            }
+            if (partida.realizarMovimiento(fila, col)) {
+                procesarFinDeTurno();
+            }
         }
+    }
+    
+    public void initPartidaMultijugador(ClienteJuego cliente) {
+        this.isMultiplayer = true;
+        this.clienteRed = cliente;
+        this.clienteRed.setUpdateListener(this::actualizarDesdeRed);
+        lblEstado.setText("Esperando al otro jugador...");
+        // Ocultar el icono de pausa en multijugador para simplificar
+        pauseIcon.setVisible(false);
+    }
+    
+    /**
+     * Este método es llamado por el ClienteJuego cada vez que llega
+     * un nuevo estado de la partida desde el servidor.
+     * @param partidaDesdeServidor El objeto Partida actualizado.
+     */
+    private void actualizarDesdeRed(Partida partidaDesdeServidor) {
+        this.partida = partidaDesdeServidor;
+        actualizarVistaCompleta();
         
-        if (partida.realizarMovimiento(fila, col)) {
-            procesarFinDeTurno();
+        // --- INICIO DE LA CORRECCIÓN ---
+        boolean esMiTurno = clienteRed.getMiFicha().equals(partida.getJugadorActual());
+        boolean juegoTerminado = partida.isJuegoTerminado() || partida.isRondaTerminada();
+        
+        // Itera sobre el array de celdas para habilitar/deshabilitar
+        for (ImageView[] fila : celdasTablero) {
+            for (ImageView celda : fila) {
+                celda.setDisable(!esMiTurno || juegoTerminado);
+            }
         }
+        // --- FIN DE LA CORRECCIÓN ---
     }
     
     private void hacerJugadaBot() {
@@ -174,12 +227,13 @@ public class JuegoController implements Initializable {
     }
 
     private void actualizarVistaCompleta() {
+        if (partida == null) return; // Guardia para evitar errores antes de que la partida inicie
         actualizarTablero();
         actualizarPuntuacion();
         actualizarEstado();
     }
     
-    private void actualizarTablero() {
+     private void actualizarTablero() {
         String[][] estadoTablero = partida.getTablero();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -194,17 +248,21 @@ public class JuegoController implements Initializable {
     private void actualizarPuntuacion() {
         puntuacionHumano.getChildren().clear();
         puntuacionBot.getChildren().clear();
-
-        // --- INICIO DE LA CORRECCIÓN ---
-        // Obtenemos la lista de resultados directamente del objeto Partida
+    
         List<String> resultados = partida.getResultadosRondas();
-        String fichaHumano = lblNombreHumano.getText().contains("(X)") ? "X" : "O";
+        String fichaPrincipal; // La ficha del jugador en el panel izquierdo
+
+        if (isMultiplayer) {
+            fichaPrincipal = clienteRed.getMiFicha();
+        } else {
+            fichaPrincipal = lblNombreHumano.getText().contains("(X)") ? "X" : "O";
+        }
 
         for (String resultado : resultados) {
             if (resultado.equals("Empate")) {
                 puntuacionHumano.getChildren().add(crearIconoResultado(imagenGuion));
                 puntuacionBot.getChildren().add(crearIconoResultado(imagenGuion));
-            } else if (resultado.equals(fichaHumano)) {
+            } else if (resultado.equals(fichaPrincipal)) {
                 puntuacionHumano.getChildren().add(crearIconoResultado(imagenCheck));
                 puntuacionBot.getChildren().add(crearIconoResultado(imagenCruz));
             } else {
@@ -228,35 +286,45 @@ public class JuegoController implements Initializable {
     }
     
     private void actualizarEstado() {
-        if (partida.isJuegoTerminado()) {
-            lblEstado.setText("¡Partida Finalizada! Ganador: " + partida.getGanadorFinal());
-            cronometro.stop();
-            Platform.runLater(this::mostrarDialogoFinDePartida);
-        } else if (partida.isRondaTerminada()) {
-            lblEstado.setText("Ronda " + partida.getRondaActual() + " terminada. Siguiente...");
-        } else {
-            lblEstado.setText("Ronda " + (partida.getRondaActual()) + " | Turno de " + partida.getJugadorActual());
+        if (isMultiplayer) {
+            boolean esMiTurno = clienteRed.getMiFicha().equals(partida.getJugadorActual());
+            celdasTablero[0][0].getScene().setCursor(esMiTurno ? javafx.scene.Cursor.HAND : javafx.scene.Cursor.DEFAULT);
+            
+            if (partida.isJuegoTerminado()) {
+                lblEstado.setText("¡Partida Finalizada! Ganador: " + partida.getGanadorFinal());
+            } else if(partida.isRondaTerminada()) {
+                 lblEstado.setText("Ronda " + partida.getRondaActual() + " terminada. Esperando al servidor...");
+            }
+            else {
+                lblEstado.setText(esMiTurno ? "¡Es tu turno!" : "Turno del Oponente");
+            }
+        } else { // Modo un jugador
+            if (partida.isJuegoTerminado()) {
+                lblEstado.setText("¡Partida Finalizada! Ganador: " + partida.getGanadorFinal());
+                cronometro.stop();
+                Platform.runLater(this::mostrarDialogoFinMultijugador);
+            } else if (partida.isRondaTerminada()) {
+                lblEstado.setText("Ronda " + partida.getRondaActual() + " terminada. Siguiente...");
+            } else {
+                lblEstado.setText("Ronda " + (partida.getRondaActual()) + " | Turno de " + partida.getJugadorActual());
+            }
         }
     }
 
     // --- Métodos de Finalización y Navegación ---
 
-    private void mostrarDialogoFinDePartida() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    // --- NUEVO MÉTODO PARA EL FIN DE PARTIDA MULTIJUGADOR ---
+    private void mostrarDialogoFinMultijugador() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Fin de la Partida");
-        alert.setHeaderText("La partida ha finalizado. Ganador: " + partida.getGanadorFinal());
-        alert.setContentText("¿Qué deseas hacer?");
+        alert.setHeaderText("La partida ha finalizado. Resultado: " + partida.getGanadorFinal());
+        alert.setContentText("Serás devuelto al menú principal.");
         
-        ButtonType btnReiniciar = new ButtonType("Jugar de Nuevo");
-        ButtonType btnSalir = new ButtonType("Salir al Menú");
-        alert.getButtonTypes().setAll(btnReiniciar, btnSalir);
+        ButtonType btnOk = new ButtonType("Volver al Menú");
+        alert.getButtonTypes().setAll(btnOk);
         
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == btnReiniciar) {
-            reiniciarPartida();
-        } else {
-            salirAlMenuDesdeComponente();
-        }
+        alert.showAndWait();
+        salirAlMenuDesdeComponente(); // Reutilizamos el método para volver al menú
     }
     
      private void reiniciarPartida() {
@@ -331,5 +399,12 @@ public class JuegoController implements Initializable {
             e.printStackTrace();
         }
         cronometro.play();
+    }
+    
+    private void mostrarAlertaError(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, mensaje);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
 }

@@ -36,7 +36,7 @@
       
       <Button fx:id="btnRnd" layoutX="371.0" layoutY="339.0" mnemonicParsing="false" onAction="#handleReanudar" prefHeight="44.0" prefWidth="211.0" text="REANUDAR" />
       
-      <Button fx:id="btnMjd" layoutX="370.0" layoutY="413.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="211.0" text="MULTIJUGADOR" />
+      <Button fx:id="btnMjd" layoutX="370.0" layoutY="413.0" onAction="#handleMultijugador" mnemonicParsing="false" prefHeight="44.0" prefWidth="211.0" text="MULTIJUGADOR" />
       
       <!-- 
         ImageView para el botón de salir. 

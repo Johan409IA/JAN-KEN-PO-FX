@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamelab.Controladores.MultijugadorMenuController">
+   <children>
+      <Label text="Modo Multijugador"><font><Font size="24.0" /></font></Label>
+      <Button onAction="#handleCrearPartida" text="Crear Partida" prefWidth="150"/>
+      <Button onAction="#handleUnirsePartida" text="Unirse a Partida" prefWidth="150"/>
+      <Label fx:id="lblStatus" text="" />
+   </children>
+</VBox>

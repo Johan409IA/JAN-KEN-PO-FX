@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
 public class Partida implements Serializable {
 
-    private static final long serialVersionUID = 4L; // Incrementamos versión por los cambios
+     private static final long serialVersionUID = 6L; // Incrementamos versión por los cambios
 
     private final String[][] tablero;
     private String jugadorActual;
@@ -15,7 +16,7 @@ public class Partida implements Serializable {
     private boolean rondaTerminada;
     
     // puntaje[0]=X, puntaje[1]=O, puntaje[2]=Empates
-    private final int[] puntaje;
+    private final int[] puntaje; // puntaje[0]=X, puntaje[1]=O, puntaje[2]=Empates
     private int rondaActual;
     private final int rondasTotales = 5;
 
@@ -48,6 +49,7 @@ public class Partida implements Serializable {
     public List<String> getResultadosRondas() { return resultadosRondas; } // Getter para la lista
     public boolean isContraBot() { return contraBot; }
     public String getJugadorBot() { return jugadorBot; }
+    public String getJugadorHumano() { return jugadorHumano; }
     public String getGanadorFinal() {
         if (puntaje[0] > puntaje[1]) return "X";
         if (puntaje[1] > puntaje[0]) return "O";
